@@ -1,88 +1,108 @@
 # MarkdownPreviewPro
 
 Live Markdown preview in an external browser with full HTML+CSS rendering —
-native `<table>`, mermaid diagrams, and syntax-highlighted code blocks.
-
-![preview](docs/screenshot.png)
+native tables, Mermaid diagrams, KaTeX math, task lists, footnotes, and more.
 
 ## Features
 
-- **Browser preview** — full HTML+CSS engine (native `<table>`, GitHub-style
-  CSS).  No compromise on rendering quality.
-- **Live refresh** — file changes are picked up automatically via
-  `<meta http-equiv="refresh">` polling.
-- **Mermaid diagrams** — rendered to SVG by
-  [mermaid-cli](https://github.com/mermaid-js/mermaid-cli) (`mmdc`).
-- **Syntax-highlighted code blocks** — via [Pygments](https://pygments.org/).
-- **Multi-browser auto-detection** — Chrome, Safari, Firefox, Edge, Brave,
-  Opera.  Chrome-family browsers get AppleScript new-window + focus.
-- **Zero external Python deps** — python-markdown and Pygments are vendored
-  under `lib/`.
+- **Browser preview** — full HTML+CSS (GitHub-style), not minihtml compromises
+- **Smart live refresh** — updates content in-place and **keeps scroll position**
+- **Relative images** — `![alt](./img/preview.png)` resolves from the markdown file dir
+- **Mermaid diagrams** — SVG via [mermaid-cli](https://github.com/mermaid-js/mermaid-cli)
+- **KaTeX math** — `$inline$`, `$$block$$`, `\(...\)`, `\[...\]`
+- **Task lists / footnotes / frontmatter** — GFM-style checkboxes, `[^1]`, YAML strip
+- **TOC sidebar** — sticky outline of headings
+- **Scroll sync** — editor cursor ↔ preview heading (with local server)
+- **Export** — standalone HTML or PDF (Chrome headless)
+- **Cross-platform browser** — macOS / Windows / Linux auto-detect
+- **Configurable** — output dir, port, browser, toggles for each feature
+- **Zero external Python deps** — python-markdown and Pygments vendored under `lib/`
 
 ## Requirements
 
-- Sublime Text 4 (Build 4107+).
-- **Node.js** for mermaid rendering (optional — diagrams that fail to render
-  show a fallback error message).  First run may be slow while `npx` caches
-  `@mermaid-js/mermaid-cli`; results are cached on disk after that.
+- Sublime Text 4 (Build 4107+)
+- **Node.js** optional — only for Mermaid (`npx` / mermaid-cli)
+- **Chrome / Chromium / Edge** optional — only for PDF export
+- Network optional — KaTeX loads from jsDelivr CDN when enabled
 
 ## Usage
 
 1. Open a `.md` file.
 2. Press `super+shift+m` (macOS) / `ctrl+shift+m` (Windows/Linux).
-3. A browser window opens showing the rendered preview.
-4. Press `super+shift+m` again to close + reopen (refresh).
-5. Edit the markdown — the preview picks up changes within 1 second.
+3. A browser tab opens with the live preview.
+4. Edit the markdown — the body updates without losing scroll (server mode).
+5. Press the shortcut again to **focus the existing preview tab** (and refresh).
+   Use **Close Preview** (Command Palette) to actually close the tab and stop the server.
 
 ### Commands
 
 | Command | Description |
 | --- | --- |
-| `MarkdownPreviewPro: Toggle Preview` | Open/close the browser preview |
+| `MarkdownPreviewPro: Toggle Preview` | Open / reopen browser preview |
 | `MarkdownPreviewPro: Close Preview` | Close browser window |
 | `MarkdownPreviewPro: Refresh Preview` | Force re-render |
+| `MarkdownPreviewPro: Export HTML…` | Write a standalone HTML file |
+| `MarkdownPreviewPro: Export PDF…` | Print to PDF via headless Chrome |
 
 ### Settings
 
+Preferences → Package Settings → MarkdownPreviewPro → Settings
+
 | Setting | Default | Description |
 | --- | --- | --- |
-| `markdown_preview_pro.mermaid_theme` | `"default"` | Mermaid theme: `default`, `dark`, `forest`, `neutral`. |
+| `mermaid_theme` | `"default"` | `default`, `dark`, `forest`, `neutral` |
+| `output_dir` | `""` | Empty = Sublime cache; else e.g. `~/Downloads/MarkdownPreviewPro` |
+| `use_local_server` | `true` | Local HTTP server for smart refresh / images / scroll sync |
+| `server_port` | `8765` | Preferred port (tries next ports if busy) |
+| `server_idle_seconds` | `45` | Auto-stop server if browser tab is closed (no HTTP activity). `0` = only stop on Close command |
+| `browser` | `"auto"` | `auto`, `default`, `chrome`, `safari`, `firefox`, `edge`, … |
+| `debounce_ms` | `500` | Live re-render debounce |
+| `show_toc` | `true` | Sticky TOC sidebar |
+| `enable_katex` | `true` | Math rendering |
+| `enable_task_lists` | `true` | `- [ ]` / `- [x]` |
+| `enable_footnotes` | `true` | `[^1]` footnotes |
+| `strip_frontmatter` | `true` | Strip leading YAML `---` blocks |
+| `scroll_sync` | `true` | Editor ↔ preview scroll (needs local server) |
+| `custom_css` | `""` | Path to extra CSS file |
 
-Example in your `Preferences.sublime-settings`:
+Example:
 
 ```jsonc
 {
-    "markdown_preview_pro.mermaid_theme": "dark"
+    "mermaid_theme": "forest",
+    "output_dir": "~/Downloads/MarkdownPreviewPro",
+    "browser": "chrome",
+    "scroll_sync": true
 }
 ```
 
 ## How it works
 
-1. The plugin reads the current markdown buffer.
-2. Mermaid fenced code blocks are extracted and rendered to SVG via `mmdc`
-   (subprocess calling `npx`).
-3. The rest of the markdown is converted to HTML by python-markdown with
-   extensions: tables, fenced_code, codehilite, toc, attr_list, nl2br.
-4. The SVG and HTML are assembled into a full `<!DOCTYPE html>` document with
-   inlined CSS, and written to
-   `~/Downloads/MarkdownPreviewPro/preview.html`.
-5. The file is opened in the default browser via `file://` URL.  The page
-   polls for file changes and auto-refreshes.
+1. Read the current markdown buffer (strip frontmatter if enabled).
+2. Extract Mermaid fences → SVG via `mmdc` (cached).
+3. Convert with python-markdown (tables, fenced_code, codehilite, toc, footnotes, …).
+4. Apply task lists, heading `data-line` markers, rewrite relative images.
+5. Serve via local HTTP (`127.0.0.1`) when `use_local_server` is on:
+   - `/` shell page with TOC + content
+   - `/api/content` body+hash for in-place refresh
+   - `/doc/...` images relative to the markdown file
+   - `/api/editor_line` + `/api/browser_scroll` for scroll sync
+6. Browser JS swaps `#mdpp-content` when the hash changes and restores scroll.
+7. **Server lifetime**: Close Preview / Toggle-off stops the HTTP server immediately.
+   Closing the browser tab alone also frees the port after `server_idle_seconds`
+   (default 45s) of no client polling.
 
-Debug logs and the last rendered HTML are also written to
-`~/Downloads/MarkdownPreviewPro/` (`debug.log`, `last_html.html`).
+Fallback without server: `file://` preview + meta refresh + `localStorage` scroll restore.
 
 ## Installation
 
 ### Via Package Control
 
-Open the Command Palette → `Package Control: Install Package` → search for
-`MarkdownPreviewPro`.
+Command Palette → `Package Control: Install Package` → `MarkdownPreviewPro`.
 
 ### Manual
 
-Copy the `MarkdownPreviewPro` folder into your Sublime Text `Packages/`
-directory:
+Copy the `MarkdownPreviewPro` folder into Sublime Text `Packages/`:
 
 | Platform | Path |
 | --- | --- |
@@ -92,36 +112,25 @@ directory:
 
 ## Development
 
-### Build & deploy
-
 ```bash
 ./build.sh                    # rsync into ST Packages/ with backup
+./release.sh 1.1.0            # tag + push + Package Control PR
+./release.sh 1.1.0 --dry-run  # preview only
 ```
-
-### Release
-
-```bash
-./release.sh 1.0.1            # tag + push + create Package Control PR
-./release.sh 1.0.1 --dry-run  # preview only, nothing pushed
-```
-
-The script:
-1. Runs `build.sh` to sync the latest code.
-2. Creates a git tag and pushes to GitHub.
-3. Forks [`sublimehq/package_control_channel`](https://github.com/sublimehq/package_control_channel).
-4. Updates `repository/m.json` with the new entry (or inserts it alphabetically).
-5. Pushes the fork and creates/updates a PR.
 
 ### Debug logs
 
-All output goes to `~/Downloads/MarkdownPreviewPro/`:
+Under `output_dir` (default: Sublime cache `MarkdownPreviewPro/`):
 
 | File | Content |
 | --- | --- |
-| `preview.html` | Live HTML (what the browser loads) |
-| `last_html.html` | Snapshot of the last rendered HTML |
-| `debug.log` | Timestamped plugin logs |
+| `preview.html` | Live shell HTML |
+| `body.html` | Last body fragment |
+| `last_html.html` | Snapshot |
+| `debug.log` | Timestamped logs |
 
 ## License
+
+测试改动
 
 MIT — see [LICENSE](LICENSE).

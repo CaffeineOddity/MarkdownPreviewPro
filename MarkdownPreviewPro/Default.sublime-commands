@@ -1,6 +1,6 @@
 [
     {
-        "caption": "MarkdownPreviewPro: Toggle Preview",
+        "caption": "MarkdownPreviewPro: Toggle Preview (open / focus tab)",
         "command": "markdown_preview_pro_toggle"
     },
     {
@@ -10,5 +10,13 @@
     {
         "caption": "MarkdownPreviewPro: Refresh Preview",
         "command": "markdown_preview_pro_refresh"
+    },
+    {
+        "caption": "MarkdownPreviewPro: Export HTML…",
+        "command": "markdown_preview_pro_export_html"
+    },
+    {
+        "caption": "MarkdownPreviewPro: Export PDF…",
+        "command": "markdown_preview_pro_export_pdf"
     }
 ]

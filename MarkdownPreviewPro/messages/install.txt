@@ -3,35 +3,35 @@ MarkdownPreviewPro
 
 Thank you for installing MarkdownPreviewPro!
 
-A live, side-by-side markdown preview for Sublime Text — no external browser or
-HTML page is opened. The preview is rendered inline with Sublime's minihtml.
+Live Markdown preview in an external browser with full HTML+CSS rendering.
 
 Features
 --------
-- Toggle a right-hand preview panel with `super+shift+m` (macOS) /
-  `ctrl+shift+m` (Windows/Linux). The window splits 50/50.
-- Live updates as you type (500ms debounce).
-- Mermaid diagrams (rendered to SVG via mermaid-cli through npx).
-- Syntax-highlighted code blocks (Pygments).
-- Tables, fenced code, TOC, and more (python-markdown extensions).
+- Toggle browser preview with `super+shift+m` (macOS) /
+  `ctrl+shift+m` (Windows/Linux).
+- Smart live refresh that preserves scroll position (local server).
+- Relative images resolved from the markdown file directory.
+- Mermaid diagrams, KaTeX math, GFM task lists, footnotes, frontmatter.
+- TOC sidebar, HTML/PDF export, optional editor↔preview scroll sync.
+- Cross-platform browser detection (macOS / Windows / Linux).
 
 Requirements
 ------------
-- Node.js (for mermaid rendering via `npx`). The first mermaid diagram will
-  fetch `@mermaid-js/mermaid-cli` through npx, which may take a moment.
-- python-markdown and Pygments are vendored under MarkdownPreviewPro/lib/, so
-  no external Python dependencies are required.
+- Sublime Text 4 (Build 4107+).
+- Node.js optional (for Mermaid via mermaid-cli / npx).
+- Chrome/Chromium/Edge optional (for PDF export).
+- Network optional (KaTeX CDN); diagrams/code still work offline.
 
 Usage
 -----
 1. Open a `.md` file.
-2. Press `super+shift+m` (macOS) to toggle the preview.
-3. Edit — the preview updates live.
+2. Press `super+shift+m` (macOS) to open the preview.
+3. Edit — the preview updates live without jumping scroll.
+4. Command Palette: Export HTML… / Export PDF…
 
 Settings
 --------
-In your Preferences or `.sublime-project`:
+Preferences → Package Settings → MarkdownPreviewPro → Settings
 
-    "markdown_preview_pro.mermaid_theme": "default"   // or "dark", "forest"
-
-See the README for publishing details.
+Key options: use_local_server, output_dir, browser, show_toc,
+enable_katex, scroll_sync, mermaid_theme, custom_css.

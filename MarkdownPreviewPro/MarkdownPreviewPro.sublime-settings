@@ -1,0 +1,47 @@
+{
+    // Mermaid theme: default | dark | forest | neutral
+    "mermaid_theme": "default",
+
+    // Live preview output directory. Empty = Sublime cache path.
+    // Example: "~/Downloads/MarkdownPreviewPro"
+    "output_dir": "",
+
+    // Use local HTTP server for smart refresh, relative images, scroll sync.
+    // If false, falls back to file:// + meta refresh with scroll restore.
+    "use_local_server": true,
+
+    // Preferred server port (will try +0..+19 if busy).
+    "server_port": 8765,
+
+    // Stop the local server after this many seconds with no browser requests.
+    // Closing the preview tab (even without the Close command) frees the port.
+    // Set to 0 to disable idle auto-stop (Close command still stops the server).
+    "server_idle_seconds": 45,
+
+    // Browser: auto | default | chrome | safari | firefox | edge | brave | opera
+    "browser": "auto",
+
+    // Debounce milliseconds for live re-render while typing.
+    "debounce_ms": 500,
+
+    // Show TOC sidebar when the document has headings.
+    "show_toc": true,
+
+    // Enable KaTeX math ($...$, $$...$$, \\(...\\), \\[...\\]).
+    "enable_katex": true,
+
+    // Enable GFM task lists (- [ ] / - [x]).
+    "enable_task_lists": true,
+
+    // Enable footnotes ([^1]).
+    "enable_footnotes": true,
+
+    // Strip YAML frontmatter (--- ... ---) before rendering.
+    "strip_frontmatter": true,
+
+    // Bidirectional scroll sync (requires use_local_server).
+    "scroll_sync": true,
+
+    // Optional extra CSS file path (absolute or ~).
+    "custom_css": ""
+}

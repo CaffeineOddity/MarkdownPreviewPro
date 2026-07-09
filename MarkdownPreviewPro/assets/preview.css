@@ -2,6 +2,7 @@
 
 html {
   background-color: #ffffff;
+  scroll-behavior: smooth;
 }
 body {
   background-color: #ffffff;
@@ -12,10 +13,62 @@ body {
   line-height: 1.6;
   color: #24292e;
 }
+
+/* ── layout with optional TOC ─────────────────────────────────────────── */
+.mdpp-wrap {
+  display: block;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0;
+}
+.mdpp-has-toc .mdpp-wrap {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 24px;
+  max-width: 1280px;
+  padding: 16px 20px 40px;
+  align-items: start;
+}
+.mdpp-toc {
+  position: sticky;
+  top: 16px;
+  max-height: calc(100vh - 32px);
+  overflow: auto;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid #d0d7de;
+  border-radius: 8px;
+  padding: 12px 14px;
+  background: #f6f8fa;
+}
+.mdpp-toc-empty { display: none; }
+.mdpp-toc .toc { margin: 0; padding: 0; list-style: none; }
+.mdpp-toc ul { list-style: none; margin: 0 0 0 0.75em; padding: 0; }
+.mdpp-toc > .toc > ul { margin-left: 0; }
+.mdpp-toc li { margin: 4px 0; }
+.mdpp-toc a {
+  color: #57606a;
+  text-decoration: none;
+}
+.mdpp-toc a:hover { color: #0969da; text-decoration: underline; }
+.mdpp-toc .toctitle {
+  display: block;
+  font-weight: 600;
+  color: #24292e;
+  margin-bottom: 8px;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
 .markdown-body {
   max-width: 980px;
   margin: 0 auto;
   padding: 24px 28px;
+}
+.mdpp-has-toc .markdown-body {
+  margin: 0;
+  max-width: none;
 }
 
 /* headings */
@@ -24,6 +77,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 16px;
   font-weight: 600;
   line-height: 1.25;
+  scroll-margin-top: 16px;
 }
 h1 { font-size: 2em; border-bottom: 1px solid #eaecef; padding-bottom: .3em; }
 h2 { font-size: 1.5em; border-bottom: 1px solid #eaecef; padding-bottom: .3em; }
@@ -38,6 +92,19 @@ a:hover { text-decoration: underline; }
 /* lists */
 ul, ol { padding-left: 2em; margin-bottom: 16px; }
 li { margin-bottom: 4px; }
+
+/* task lists */
+.contains-task-list {
+  list-style: none;
+  padding-left: 1.2em;
+}
+.task-list-item {
+  list-style: none;
+}
+.task-list-item-checkbox {
+  margin-right: 0.4em;
+  vertical-align: middle;
+}
 
 /* inline code */
 code {
@@ -73,7 +140,7 @@ blockquote {
   margin: 0 0 16px 0;
 }
 
-/* ── tables (native <table>, full browser rendering) ───────────────────── */
+/* tables */
 table {
   margin: 0 0 16px 0;
   border-collapse: collapse;
@@ -111,4 +178,80 @@ hr {
   background-color: #fff5f5;
   border: 1px solid #ffdce0;
   border-radius: 6px;
+}
+
+/* footnotes */
+.footnote {
+  font-size: 0.9em;
+}
+.footnote hr {
+  margin: 16px 0;
+}
+.footnote ol {
+  padding-left: 1.5em;
+}
+div.footnote {
+  border-top: 1px solid #d0d7de;
+  margin-top: 24px;
+  padding-top: 8px;
+  font-size: 0.9em;
+  color: #57606a;
+}
+
+/* Math: unrendered fallback (italic plain) vs server-side KaTeX */
+.mdpp-math-inline:not([data-mdpp-rendered]) {
+  display: inline;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+}
+.mdpp-math-display:not([data-mdpp-rendered]) {
+  display: block;
+  margin: 1em 0;
+  text-align: center;
+  overflow-x: auto;
+  font-family: "Times New Roman", Times, serif;
+  font-style: italic;
+}
+.mdpp-math-ssr.mdpp-math-display,
+.mdpp-math-display[data-mdpp-rendered] {
+  display: block;
+  margin: 1em 0;
+  text-align: center;
+  overflow-x: auto;
+  font-style: normal;
+  font-family: inherit;
+}
+.mdpp-math-ssr.mdpp-math-inline,
+.mdpp-math-inline[data-mdpp-rendered] {
+  display: inline;
+  font-style: normal;
+  font-family: inherit;
+}
+.katex-display {
+  margin: 1em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* print */
+@media print {
+  .mdpp-toc { display: none !important; }
+  .mdpp-has-toc .mdpp-wrap {
+    display: block !important;
+    padding: 0 !important;
+  }
+  .markdown-body {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .mdpp-has-toc .mdpp-wrap {
+    grid-template-columns: 1fr;
+  }
+  .mdpp-toc {
+    position: static;
+    max-height: 200px;
+  }
 }

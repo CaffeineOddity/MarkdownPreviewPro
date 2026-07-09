@@ -3,6 +3,8 @@
 Live Markdown preview in an external browser with full HTML+CSS rendering —
 native tables, Mermaid diagrams, KaTeX math, task lists, footnotes, and more.
 
+![alt](./img/preview.png)
+
 ## Features
 
 - **Browser preview** — full HTML+CSS (GitHub-style), not minihtml compromises

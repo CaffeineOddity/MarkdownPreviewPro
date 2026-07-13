@@ -21,8 +21,7 @@
 | Code syntax highlighting (Pygments) | ✅ |
 | Scroll sync (editor ↔ preview) | ✅ |
 | Export to standalone HTML | ✅ |
-| Export to PNG (html2canvas, in-browser) | 🖼️ |
-| Export to PDF (headless Chrome) | ✅ (ST command) |
+| Export to PNG (html2canvas, in-browser) | ✅ |
 | Export toolbar (PNG + HTML buttons on preview page) | ✅ |
 | Relative image resolution (`./img/a.png`) | ✅ |
 | Cross-platform (macOS / Windows / Linux) | ✅ |
@@ -33,7 +32,7 @@
 
 - Sublime Text 4 (Build 4107+)
 - **Nothing else** — python-markdown, Pygments, KaTeX, Mermaid, ECharts, html2canvas are all vendored
-- Chrome / Chromium optional — PDF export only (via ST command)
+- **No Chrome required** — PNG via html2canvas, HTML via local server
 
 ## Usage
 
@@ -60,8 +59,6 @@ The preview page has export buttons in the bottom-left corner:
 | `Cmd+Shift+M` | `Ctrl+Shift+M` | Toggle Preview |
 | `Cmd+Shift+Alt+M` | `Ctrl+Shift+Alt+M` | Close Preview |
 | `Cmd+Shift+E` | `Ctrl+Shift+E` | Export HTML |
-| `Cmd+Shift+Ctrl+E` | `Ctrl+Shift+Alt+E` | Export PDF |
-
 ### Commands
 
 | Command | Description |
@@ -70,8 +67,6 @@ The preview page has export buttons in the bottom-left corner:
 | `MarkdownPreviewEnhanced: Close Preview` | Close preview and stop server |
 | `MarkdownPreviewEnhanced: Refresh Preview` | Force re-render |
 | `MarkdownPreviewEnhanced: Export HTML…` | Write a standalone HTML file |
-| `MarkdownPreviewEnhanced: Export PDF…` | Print to PDF via headless Chrome |
-
 ### Settings
 
 Preferences → Package Settings → **MarkdownPreviewEnhanced** → Settings
@@ -131,8 +126,6 @@ API endpoints:
 | `GET /api/stream` | SSE push (content + editor line) |
 | `POST /api/browser_scroll` | Scroll sync (browser → editor) |
 | `GET /api/export/html` | Clean standalone HTML export |
-| `GET /api/export/pdf` | PDF export (Chrome headless) |
-| `GET /api/export/png` | PNG export (Chrome headless) |
 | `GET /assets/*` | Vendored JS/CSS/fonts |
 | `GET /doc/*` | Local images from document directory |
 

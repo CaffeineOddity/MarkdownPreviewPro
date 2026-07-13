@@ -139,12 +139,6 @@ class _Handler(BaseHTTPRequestHandler):
         if path in ("/", "/preview.html", "/index.html"):
             self._serve_shell()
             return
-        if path == "/api/export/pdf":
-            self._api_export_pdf()
-            return
-        if path == "/api/export/png":
-            self._api_export_png()
-            return
         if path == "/api/export/html":
             self._api_export_html()
             return
@@ -193,120 +187,6 @@ class _Handler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(data)))
         self.end_headers()
         self.wfile.write(data)
-
-    def _api_export_pdf(self):
-        """Generate PDF via headless Chrome and return the file."""
-        import tempfile
-        from .export_util import export_pdf
-
-        with _STATE.lock:
-            raw = _STATE.raw_markdown
-            base_dir = _STATE.export_base_dir or _STATE.doc_dir
-            settings = dict(_STATE.export_settings)
-        if not raw:
-            self.send_error(400, "No markdown content available for export")
-            return
-
-        fd, tmp_pdf = tempfile.mkstemp(suffix=".pdf", prefix="mdpp_api_export_")
-        os.close(fd)
-        try:
-            export_pdf(
-                raw,
-                tmp_pdf,
-                base_dir=base_dir,
-                mermaid_theme=settings.get("mermaid_theme", "default"),
-                show_toc=settings.get("show_toc", False),
-                enable_katex=settings.get("enable_katex", True),
-                custom_css=settings.get("custom_css", ""),
-                title=settings.get("title", "Markdown Export"),
-            )
-            with open(tmp_pdf, "rb") as f:
-                data = f.read()
-            self.send_response(200)
-            self._cors()
-            self.send_header("Content-Type", "application/pdf")
-            self.send_header("Content-Length", str(len(data)))
-            self.send_header(
-                "Content-Disposition",
-                'attachment; filename="%s.pdf"'
-                % (settings.get("title", "export") or "export"),
-            )
-            self.end_headers()
-            self.wfile.write(data)
-        except Exception as e:
-            traceback.print_exc()
-            self.send_response(500)
-            self._cors()
-            self.send_header("Content-Type", "application/json")
-            payload = json.dumps(
-                {"error": str(e), "fallback": "window.print()"},
-                ensure_ascii=False,
-            ).encode("utf-8")
-            self.send_header("Content-Length", str(len(payload)))
-            self.end_headers()
-            self.wfile.write(payload)
-        finally:
-            try:
-                os.unlink(tmp_pdf)
-            except Exception:
-                pass
-
-    def _api_export_png(self):
-        """Generate PNG screenshot via headless Chrome and return the file."""
-        import tempfile
-        from .export_util import export_png
-
-        with _STATE.lock:
-            raw = _STATE.raw_markdown
-            base_dir = _STATE.export_base_dir or _STATE.doc_dir
-            settings = dict(_STATE.export_settings)
-        if not raw:
-            self.send_error(400, "No markdown content available for export")
-            return
-
-        fd, tmp_png = tempfile.mkstemp(suffix=".png", prefix="mdpp_api_export_")
-        os.close(fd)
-        try:
-            export_png(
-                raw,
-                tmp_png,
-                base_dir=base_dir,
-                mermaid_theme=settings.get("mermaid_theme", "default"),
-                show_toc=settings.get("show_toc", False),
-                enable_katex=settings.get("enable_katex", True),
-                custom_css=settings.get("custom_css", ""),
-                title=settings.get("title", "Markdown Export"),
-            )
-            with open(tmp_png, "rb") as f:
-                data = f.read()
-            self.send_response(200)
-            self._cors()
-            self.send_header("Content-Type", "image/png")
-            self.send_header("Content-Length", str(len(data)))
-            self.send_header(
-                "Content-Disposition",
-                'attachment; filename="%s.png"'
-                % (settings.get("title", "export") or "export"),
-            )
-            self.end_headers()
-            self.wfile.write(data)
-        except Exception as e:
-            traceback.print_exc()
-            self.send_response(500)
-            self._cors()
-            self.send_header("Content-Type", "application/json")
-            payload = json.dumps(
-                {"error": str(e)},
-                ensure_ascii=False,
-            ).encode("utf-8")
-            self.send_header("Content-Length", str(len(payload)))
-            self.end_headers()
-            self.wfile.write(payload)
-        finally:
-            try:
-                os.unlink(tmp_png)
-            except Exception:
-                pass
 
     def _api_export_html(self):
         """Generate clean standalone HTML (no toolbar, no polling) and return it."""

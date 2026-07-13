@@ -452,88 +452,27 @@ body {
 
 /* ── print ────────────────────────────────────────────────────────────── */
 @media print {
-  /* Hide UI */
   .mdpp-toolbar,
   .mdpp-countdown,
   .mdpp-toc { display: none !important; }
 
-  /* Reset layout */
   .mdpp-has-toc .mdpp-wrap {
     display: block !important;
     padding: 0 !important;
   }
 
-  /* Page setup */
-  @page {
-    margin: 1.8cm 1.5cm;
-    size: auto;
-  }
-
-  body {
-    font-size: 12pt;
-    line-height: 1.5;
-    color: #000;
-    background: #fff;
-  }
+  @page { margin: 1.5cm; }
 
   .markdown-body {
     max-width: none !important;
     padding: 0 !important;
   }
 
-  /* Headings */
-  .markdown-body h1, .markdown-body h2, .markdown-body h3,
-  .markdown-body h4, .markdown-body h5, .markdown-body h6 {
-    page-break-after: avoid;
-    color: #000;
-  }
-  .markdown-body h1 { font-size: 1.6rem; }
-  .markdown-body h2 { font-size: 1.3rem; }
-  .markdown-body h3 { font-size: 1.1rem; }
-
-  /* Code — prevent overflow, remove backgrounds */
   .markdown-body pre,
-  .markdown-body code,
   .markdown-body .codehilite {
-    background: #f8f8f8 !important;
-    border: 1px solid #ddd;
     white-space: pre-wrap !important;
     word-wrap: break-word !important;
-    overflow-wrap: break-word !important;
-  }
-  .markdown-body pre,
-  .markdown-body .codehilite {
-    page-break-inside: avoid;
     box-shadow: none !important;
-  }
-
-  /* Tables */
-  .markdown-body table {
-    page-break-inside: avoid;
-    box-shadow: none !important;
-  }
-
-  /* Images & diagrams */
-  .markdown-body img,
-  .markdown-body .mermaid-svg svg,
-  .markdown-body svg {
-    max-width: 100% !important;
-    page-break-inside: avoid;
-    box-shadow: none !important;
-  }
-
-  /* Links — show URL */
-  .markdown-body a { color: #000; }
-  .markdown-body a[href^="http"]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.8em;
-    color: #666;
-  }
-
-  /* Blockquotes */
-  .markdown-body blockquote {
-    border-left: 3px solid #999;
-    background: none !important;
   }
 }
 

@@ -1,5 +1,7 @@
 __pycache__/
-*.pyc
 .DS_Store
+.omc/
+*.pyc
 *.sublime-project
 *.sublime-workspace
+docs/test.md

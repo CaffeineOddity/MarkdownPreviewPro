@@ -1,0 +1,6 @@
+[
+    { "keys": ["ctrl+shift+m"], "command": "markdown_preview_enhanced_toggle" },
+    { "keys": ["ctrl+shift+alt+m"], "command": "markdown_preview_enhanced_close" },
+    { "keys": ["ctrl+shift+e"], "command": "markdown_preview_enhanced_export_html" },
+    { "keys": ["ctrl+shift+alt+e"], "command": "markdown_preview_enhanced_export_pdf" }
+]

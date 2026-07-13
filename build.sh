@@ -1,40 +1,40 @@
 #!/bin/bash
 set -euo pipefail
 
-SRC="$(cd "$(dirname "$0")" && pwd)/MarkdownPreviewPro"
-DST="${HOME}/Library/Application Support/Sublime Text/Packages/MarkdownPreviewPro"
+# Deploy package files from the repo root into Sublime Text Packages/.
+# The GitHub repository root *is* the package root (Package Control requirement).
 
-echo "=== MarkdownPreviewPro build ==="
-echo "  src: ${SRC}"
+REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
+PKG_NAME="MarkdownPreviewEnhanced"
+DST="${HOME}/Library/Application Support/Sublime Text/Packages/${PKG_NAME}"
+
+echo "=== ${PKG_NAME} build ==="
+echo "  src: ${REPO_ROOT}"
 echo "  dst: ${DST}"
 
-if [ ! -d "${SRC}" ]; then
-    echo "ERROR: source dir not found: ${SRC}"
-    exit 1
-fi
-
-# Backup existing files (one-level deep, timestamped)
-BACKUP_DIR="$(dirname "${DST}")/.MarkdownPreviewPro_bak_$(date +%Y%m%d_%H%M%S)"
-if [ -d "${DST}" ]; then
-    mkdir -p "${BACKUP_DIR}"
-    cp -R "${DST}" "${BACKUP_DIR}/"
-    echo "  backup: ${BACKUP_DIR}"
-fi
-
-# Create target dir
 mkdir -p "${DST}"
 
-# Rsync source → dest, excluding caches
+# Sync package contents only — exclude tooling / VCS / agent state.
 rsync -av --delete \
+    --exclude='.git/' \
+    --exclude='.claude/' \
+    --exclude='.omc/' \
     --exclude='__pycache__/' \
     --exclude='*.pyc' \
     --exclude='.python-version' \
     --exclude='.DS_Store' \
-    "${SRC}/" "${DST}/"
+    --exclude='.gitignore' \
+    --exclude='build.sh' \
+    --exclude='release.sh' \
+    --exclude='AGENTS.md' \
+    --exclude='docs/' \
+    --exclude='repository.json' \
+    --exclude='repository.json.example' \
+    "${REPO_ROOT}/" "${DST}/"
 
 echo "  done ✓"
 echo ""
 echo "Files copied:"
-find "${DST}" -type f -not -path '*__pycache__*' -not -name '*.pyc' | sort | while read f; do
+find "${DST}" -type f -not -path '*__pycache__*' -not -name '*.pyc' | sort | while read -r f; do
     echo "  ${f#${DST}/}"
 done

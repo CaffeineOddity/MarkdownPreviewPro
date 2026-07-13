@@ -1,0 +1,22 @@
+[
+    {
+        "caption": "MarkdownPreviewEnhanced: Toggle Preview",
+        "command": "markdown_preview_enhanced_toggle"
+    },
+    {
+        "caption": "MarkdownPreviewEnhanced: Close Preview",
+        "command": "markdown_preview_enhanced_close"
+    },
+    {
+        "caption": "MarkdownPreviewEnhanced: Refresh Preview",
+        "command": "markdown_preview_enhanced_refresh"
+    },
+    {
+        "caption": "MarkdownPreviewEnhanced: Export HTML…",
+        "command": "markdown_preview_enhanced_export_html"
+    },
+    {
+        "caption": "MarkdownPreviewEnhanced: Export PDF…",
+        "command": "markdown_preview_enhanced_export_pdf"
+    }
+]

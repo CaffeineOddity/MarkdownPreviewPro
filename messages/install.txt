@@ -1,0 +1,37 @@
+MarkdownPreviewEnhanced
+====================
+
+Thank you for installing MarkdownPreviewEnhanced (MarkdownPreviewEnhanced)!
+
+Live Markdown preview in an external browser with full HTML+CSS rendering.
+
+Features
+--------
+- Toggle browser preview with `super+shift+m` (macOS) /
+  `ctrl+shift+m` (Windows/Linux).
+- Smart live refresh that preserves scroll position (local server).
+- Relative images resolved from the markdown file directory.
+- Mermaid diagrams and KaTeX math (vendored KaTeX; no CDN required).
+- GFM task lists, footnotes, frontmatter stripping.
+- TOC sidebar, HTML/PDF export, optional editor↔preview scroll sync.
+- Cross-platform browser detection (macOS / Windows / Linux).
+
+Requirements
+------------
+- Sublime Text 4 (Build 4107+).
+- Node.js optional (Mermaid via mermaid-cli / npx, and KaTeX SSR).
+- Chrome/Chromium/Edge optional (for PDF export).
+
+Usage
+-----
+1. Open a `.md` file.
+2. Press `super+shift+m` (macOS) to open the preview.
+3. Edit — the preview updates live without jumping scroll.
+4. Command Palette: `MarkdownPreviewEnhanced: Export HTML…` / `Export PDF…`
+
+Settings
+--------
+Preferences → Package Settings → MarkdownPreviewEnhanced → Settings
+
+Key options: use_local_server, output_dir, browser, show_toc,
+enable_katex, scroll_sync, mermaid_theme, custom_css.

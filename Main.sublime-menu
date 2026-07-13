@@ -1,0 +1,65 @@
+[
+    {
+        "id": "preferences",
+        "children": [
+            {
+                "caption": "Package Settings",
+                "id": "package-settings",
+                "children": [
+                    {
+                        "caption": "MarkdownPreviewEnhanced",
+                        "children": [
+                            {
+                                "caption": "Settings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/MarkdownPreviewEnhanced/MarkdownPreviewEnhanced.sublime-settings",
+                                    "default": "{\n\t$0\n}\n"
+                                }
+                            },
+                            {
+                                "caption": "Key Bindings",
+                                "command": "edit_settings",
+                                "args": {
+                                    "base_file": "${packages}/MarkdownPreviewEnhanced/Default ($platform).sublime-keymap",
+                                    "default": "[\n\t$0\n]\n"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "tools",
+        "children": [
+            {
+                "caption": "MarkdownPreviewEnhanced",
+                "children": [
+                    {
+                        "caption": "Toggle Preview",
+                        "command": "markdown_preview_enhanced_toggle"
+                    },
+                    {
+                        "caption": "Close Preview",
+                        "command": "markdown_preview_enhanced_close"
+                    },
+                    {
+                        "caption": "Refresh Preview",
+                        "command": "markdown_preview_enhanced_refresh"
+                    },
+                    { "caption": "-", "id": "mpe_export_sep" },
+                    {
+                        "caption": "Export HTML…",
+                        "command": "markdown_preview_enhanced_export_html"
+                    },
+                    {
+                        "caption": "Export PDF…",
+                        "command": "markdown_preview_enhanced_export_pdf"
+                    }
+                ]
+            }
+        ]
+    }
+]

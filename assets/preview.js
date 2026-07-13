@@ -207,10 +207,6 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
-  window.mdppExportPdf = function mdppExportPdf() {
-    window.print();
-  };
-
   window.mdppExportPng = function mdppExportPng() {
     setExportLoading("mdpp-export-png", true);
     var target = document.getElementById("mdpp-content") || document.body;
@@ -237,11 +233,6 @@
   };
 
   window.mdppExportHtml = function mdppExportHtml() {
-    if (cfg.mode !== "server") {
-      var html = document.documentElement.outerHTML;
-      downloadBlob(new Blob(["<!DOCTYPE html>\n" + html], { type: "text/html" }), (document.title || "export").replace(/[^\w.-]/g, "_") + ".html");
-      return;
-    }
     setExportLoading("mdpp-export-html", true);
     fetch("/api/export/html")
       .then(function (r) {
@@ -249,10 +240,19 @@
         return r.blob();
       })
       .then(function (blob) {
-        downloadBlob(blob, (document.title || "export").replace(/[^\w.-]/g, "_") + ".html");
+        var title = (document.title || "export").replace(/[^\w.-]/g, "_");
+        downloadBlob(blob, title + ".html");
         setExportLoading("mdpp-export-html", false);
       })
-      .catch(function () { setExportLoading("mdpp-export-html", false); });
+      .catch(function (err) {
+        setExportLoading("mdpp-export-html", false);
+        // Fallback: download current DOM
+        try {
+          var html = document.documentElement.outerHTML;
+          var title = (document.title || "export").replace(/[^\w.-]/g, "_");
+          downloadBlob(new Blob(["<!DOCTYPE html>\n" + html], { type: "text/html" }), title + ".html");
+        } catch (e) {}
+      });
   };
 
   // ── init ─────────────────────────────────────────────────────────────

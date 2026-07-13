@@ -247,7 +247,6 @@ def build_preview_shell(
         "</head>\n"
         "<body class=\"%s\" data-mdpp-mode=\"%s\">\n"
         "<div class=\"mdpp-toolbar\">\n"
-        "<button id=\"mdpp-export-pdf\" title=\"Export PDF\" onclick=\"mdppExportPdf()\">📄</button>\n"
         "<button id=\"mdpp-export-png\" title=\"Export PNG\" onclick=\"mdppExportPng()\">🖼️</button>\n"
         "<button id=\"mdpp-export-html\" title=\"Export HTML\" onclick=\"mdppExportHtml()\">💾</button>\n"
         "</div>\n"

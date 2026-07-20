@@ -6,6 +6,8 @@ used by the renderer if codehilite is unavailable.
 """
 import os
 
+from . import PACKAGE_ROOT
+
 
 def highlight_css_path():
-    return os.path.join(os.path.dirname(__file__), "assets", "highlight.css")
+    return os.path.join(PACKAGE_ROOT, "assets", "highlight.css")

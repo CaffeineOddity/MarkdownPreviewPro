@@ -12,7 +12,6 @@ Features:
 """
 import os
 import re
-import sys
 import hashlib
 
 # ── debug file logging ──────────────────────────────────────────────────────
@@ -32,14 +31,10 @@ def _mdpp_log(msg):
         pass
 
 
-_LIB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lib")
-if _LIB not in sys.path:
-    sys.path.insert(0, _LIB)
-
 try:
-    import markdown as _md
-    from markdown.extensions.codehilite import CodeHiliteExtension
-    from markdown.extensions.toc import TocExtension
+    from . import markdown as _md
+    from .markdown.extensions.codehilite import CodeHiliteExtension
+    from .markdown.extensions.toc import TocExtension
     _HAS_MARKDOWN = True
     _IMPORT_ERROR = None
 except Exception as _e:
@@ -47,17 +42,7 @@ except Exception as _e:
     _IMPORT_ERROR = "%s: %s" % (type(_e).__name__, _e)
     import traceback as _tb
     _IMPORT_TRACEBACK = _tb.format_exc()
-    try:
-        # importlib.util.find_spec not available in Python 3.3 (Sublime Text).
-        import imp as _imp
-        _imp.find_module("markdown")
-        _WHERE = "found via imp.find_module"
-    except Exception:
-        try:
-            _WHERE = "found at %s" % __import__("markdown").__file__
-        except Exception:
-            _WHERE = "NOT FOUND"
-    _mdpp_log("markdown import failed; resolved to: %s; lib=%s" % (_WHERE, _LIB))
+    _mdpp_log("markdown import failed: %s" % _IMPORT_ERROR)
 
 from .katex_renderer import render_tex_batch  # noqa: E402
 

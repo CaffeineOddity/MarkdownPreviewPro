@@ -2,9 +2,20 @@
 import os
 import platform
 import subprocess
+import sys
 import webbrowser
 
 _SYSTEM = platform.system()
+
+
+def _startupinfo():
+    """Hide the console window when spawning subprocesses on Windows."""
+    if sys.platform == "win32":
+        si = subprocess.STARTUPINFO()
+        si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        return si
+    return None
+
 
 # (bundle_id, display_name, applescript_name or None, supports_tab_script)
 _MAC_BROWSERS = [
@@ -377,7 +388,8 @@ class BrowserSession:
                 try:
                     self.proc = subprocess.Popen(
                         [path, url],
-                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                        startupinfo=_startupinfo())
                     self.app_name = path
                     log("opened Windows browser %s: %s" % (path, url))
                     return True
@@ -389,7 +401,8 @@ class BrowserSession:
                 try:
                     self.proc = subprocess.Popen(
                         [path, url],
-                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                        startupinfo=_startupinfo())
                     self.app_name = path
                     log("opened Windows browser %s: %s" % (path, url))
                     return True
@@ -405,7 +418,8 @@ class BrowserSession:
         try:
             self.proc = subprocess.Popen(
                 ["cmd", "/c", "start", "", url],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                startupinfo=_startupinfo())
             log("opened via cmd start: %s" % url)
             return True
         except Exception as e:
@@ -419,7 +433,8 @@ class BrowserSession:
             try:
                 self.proc = subprocess.Popen(
                     [name, url],
-                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                    startupinfo=_startupinfo())
                 self.app_name = name
                 log("opened Linux browser %s: %s" % (name, url))
                 return True
@@ -431,7 +446,8 @@ class BrowserSession:
         try:
             self.proc = subprocess.Popen(
                 ["xdg-open", url],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                startupinfo=_startupinfo())
             log("opened via xdg-open: %s" % url)
             return True
         except Exception as e:

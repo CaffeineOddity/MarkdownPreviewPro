@@ -9,17 +9,19 @@ import subprocess
 import json
 import threading
 
+from . import PACKAGE_ROOT
+
 _CACHE = {}
 _CACHE_LOCK = threading.Lock()
 _NODE = None
 _NODE_CHECKED = False
 _KATEX_JS = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "assets", "katex", "katex.min.js"
+    PACKAGE_ROOT, "assets", "katex", "katex.min.js"
 )
 
 # One long-lived helper script path written next to katex.
 _HELPER = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "assets", "katex", "_render_worker.js"
+    PACKAGE_ROOT, "assets", "katex", "_render_worker.js"
 )
 
 

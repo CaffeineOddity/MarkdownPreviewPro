@@ -4,23 +4,25 @@ KaTeX and Mermaid are always served from vendored package assets — never from 
 """
 import os
 
+from . import PACKAGE_ROOT
+
 
 def _mermaid_js_path():
-    path = os.path.join(os.path.dirname(__file__), "assets", "mermaid.min.js")
+    path = os.path.join(PACKAGE_ROOT, "assets", "mermaid.min.js")
     if os.path.isfile(path):
         return path
     return None
 
 
 def _echarts_js_path():
-    path = os.path.join(os.path.dirname(__file__), "assets", "echarts.min.js")
+    path = os.path.join(PACKAGE_ROOT, "assets", "echarts.min.js")
     if os.path.isfile(path):
         return path
     return None
 
 
 def _load_asset(name):
-    path = os.path.join(os.path.dirname(__file__), "assets", name)
+    path = os.path.join(PACKAGE_ROOT, "assets", name)
     try:
         with open(path, "r", encoding="utf-8") as f:
             return f.read()
@@ -29,7 +31,7 @@ def _load_asset(name):
 
 
 def _katex_local_paths():
-    base = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets", "katex")
+    base = os.path.join(PACKAGE_ROOT, "assets", "katex")
     css = os.path.join(base, "katex.min.css")
     js = os.path.join(base, "katex.min.js")
     if os.path.isfile(css) and os.path.isfile(js):
@@ -225,7 +227,7 @@ def build_preview_shell(
 
     html2canvas_tag = ""
     if use_server:
-        html2canvas_path = os.path.join(os.path.dirname(__file__), "assets", "html2canvas.min.js")
+        html2canvas_path = os.path.join(PACKAGE_ROOT, "assets", "html2canvas.min.js")
         if os.path.isfile(html2canvas_path):
             html2canvas_tag = '<script src="/assets/html2canvas.min.js"></script>\n'
 

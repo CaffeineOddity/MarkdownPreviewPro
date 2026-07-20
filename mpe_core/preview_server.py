@@ -9,6 +9,8 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from socketserver import ThreadingMixIn
 from urllib.parse import unquote, urlparse
 
+from . import PACKAGE_ROOT
+
 
 class ThreadingHTTPServer(ThreadingMixIn, HTTPServer):
     """Threaded HTTP server — Python 3.3+ compatible (ST3/ST4 safe)."""
@@ -351,7 +353,7 @@ class _Handler(BaseHTTPRequestHandler):
         self._serve_file(full)
 
     def _serve_package_asset(self, rel):
-        assets = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+        assets = os.path.join(PACKAGE_ROOT, "assets")
         full = self._safe_join(assets, rel)
         self._serve_file(full)
 

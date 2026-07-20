@@ -11,12 +11,12 @@ import traceback
 import sublime
 import sublime_plugin
 
-from . import config
-from .browser import BrowserSession
-from .export_util import export_html, export_pdf
-from .html_builder import build_preview_shell
-from .md_renderer import render as render_markdown, set_debug_log_path
-from .preview_server import (
+from .mpe_core import config
+from .mpe_core.browser import BrowserSession
+from .mpe_core.export_util import export_html, export_pdf
+from .mpe_core.html_builder import build_preview_shell
+from .mpe_core.md_renderer import render as render_markdown, set_debug_log_path
+from .mpe_core.preview_server import (
     SERVER,
     close_browser_tabs,
     pop_browser_line,
